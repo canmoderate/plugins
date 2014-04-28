@@ -1,6 +1,11 @@
 package com.canmoderate;
 
 
+import com.canmoderate.client.CanModerateService;
+import com.canmoderate.client.data.*;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.net.ssl.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +16,7 @@ import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,66 +55,39 @@ public class Tools {
         return null;
     }
 
+
     public static void main(String[] args) {
         System.out.println("CanModerate Client Tools 1.0");
 
-
         try {
-            SSLContext ctx = SSLContext.getInstance("TLS");
-            ctx.init(new KeyManager[0], new TrustManager[] {new DefaultTrustManager()}, new SecureRandom());
-            SSLContext.setDefault(ctx);
 
-            URL url = new URL("https://api.canmoderate.com/api/version");
-            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+            System.out.println("version: "+CanModerateService.getVersion().version);
+            System.out.println("server date: "+CanModerateService.getVersion().date);
+            System.out.println("--------");
+            System.out.println("Open connection with Oauth keys");
+            RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest();
+            //fill outh parameters
+            refreshTokenRequest.grant_type = "refresh_token";
+            refreshTokenRequest.client_id = "BBRALWUMGRRTNZIEQRWOQFET";
+            refreshTokenRequest.client_secret = "432526176353";
+            refreshTokenRequest.refresh_token = "84d0a86d-2354-416f-a249-e5451848b643";
+            RefreshTokenResponse refreshTokenResponse  = CanModerateService.refreshToken(refreshTokenRequest);
 
-            conn.setHostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String arg0, SSLSession arg1) {
-                    return true;
-                }
-            });
+            System.out.println("Access token: "+refreshTokenResponse.access_token);
 
-            System.out.println(conn.getResponseCode());
-            conn.disconnect();
+            MessageRequest message = new MessageRequest();
+            message.clientIp = "10.0.0.1";
+            message.trackingId = UUID.randomUUID().toString();
 
-            System.out.println(getJSON(url, 10000));
-            /*SSLContext ctx = SSLContext.getInstance("TLS");
-            ctx.init(new KeyManager[0], new TrustManager[] {new DefaultTrustManager()}, new SecureRandom());
-            SSLContext.setDefault(ctx);
-            URL url = new URL("https://api.canmoderate.com/api/version");
-            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-            conn.setHostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String arg0, SSLSession arg1) {
-                    return true;
-                }
-            });
-            System.out.println(conn.getResponseCode());
-            System.out.println(conn.getContent().toString());
-            conn.disconnect();
+            message.message = "test message";
 
-            HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
-
-            SSLContextBuilder builder = new SSLContextBuilder();
-            builder.loadTrustMaterial(null, new TrustApiSignedStrategy());
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-                    builder.build());
-            CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(
-                    sslsf).setHostnameVerifier(new BrowserCompatHostnameVerifier()).
-                    build();
-
-            HttpGet httpGet = new HttpGet("https://api.canmoderate.com/api/version");
-            CloseableHttpResponse response = httpclient.execute(httpGet);
-            try {
-                System.out.println("Status:");
-                System.out.println(response.getStatusLine());
-                HttpEntity entity = response.getEntity();
-                EntityUtils.consume(entity);
+            MessageResponse messageResponse = CanModerateService.validateMessage(refreshTokenResponse.access_token, message);
+            System.out.println("Response trackingId: "+messageResponse.trackingId);
+            for (MessageResult result : messageResponse.results) {
+                System.out.println("Result: "+result.result + " type: "+result.vcType);
             }
-            finally {
-                response.close();
-            }
-*/
+
+
 
         } catch(Exception e) {
             System.out.print("Error: ");
