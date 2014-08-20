@@ -13,7 +13,7 @@
  * @category   Plugin
  * @package    CanModerateService
  * @author     Yevhen Lysyakov <neolysy@gmail.com>
- * @author     Oleh Havrylyuk <o.gavril@gmail.com>
+ * @author     Oleh Havrylyuk <ohavryl@gmail.com>
  * @copyright  2014 CanModerate
  * @license    MIT
  * @version    SVN: $Id$
