@@ -23,13 +23,13 @@
 
 class ModerationContent {
 	public $lang = null;
-    public $serverIp = null;
-    public $serverDomain = null;
-    public $ip = null;
-    public $trackingId = null;
-    public $userId = null;
-    public $message = '';
-    public $messageFormat = null;
+	public $serverIp = null;
+	public $serverDomain = null;
+	public $ip = null;
+	public $trackingId = null;
+	public $userId = null;
+	public $message = '';
+	public $messageFormat = null;
 };
 
 class CanModerateService {
@@ -45,8 +45,8 @@ class CanModerateService {
 	private $retryCount = 0;
 
 	function __construct($client_id, $client_secret, $refresh_token) {
-       $this->setUserCredentials($client_id, $client_secret, $refresh_token);
-    }
+	   $this->setUserCredentials($client_id, $client_secret, $refresh_token);
+	}
 
 	public function checkContent($content) {
 		try {
@@ -100,29 +100,29 @@ class CanModerateService {
 		$headers = Array("Content-Type: application/json");
 
 		if( $curl = curl_init() ) {
-		    curl_setopt($curl, CURLOPT_URL, $src);
-		    curl_setopt($curl, CURLOPT_VERBOSE, true);
-		    
-		    if ($accessToken) {
-		    	array_push($headers, 'Authorization: '.self::OAuthTokenPrefix.' '.$accessToken);
-		    }
-		    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+			curl_setopt($curl, CURLOPT_URL, $src);
+			curl_setopt($curl, CURLOPT_VERBOSE, true);
+			
+			if ($accessToken) {
+				array_push($headers, 'Authorization: '.self::OAuthTokenPrefix.' '.$accessToken);
+			}
+			curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
-		    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-		    curl_setopt($curl, CURLOPT_POST, true);
-		    curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($curl, CURLOPT_POST, true);
+			curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-		    $output = curl_exec($curl);
+			$output = curl_exec($curl);
 
 			$httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 			if ($httpcode != 200) {
 				throw new Exception("http request failed", $httpcode);
 			}
 
-		    curl_close($curl);
+			curl_close($curl);
 
-		    return $output;
+			return $output;
 		}
 	}
 }
@@ -144,28 +144,25 @@ print_r($validationResult);
 
 class ValidationResult {
 	// policyType
-    public $vcType = null;
+	public $vcType = null;
 
-    public $vcid = null;
-    public $listId = null;
+	public $vcid = null;
+	public $listId = null;
 
-    public $listName = null;
-    public $entry = null;
+	public $listName = null;
+	public $entry = null;
 
-    // policyResult
-    public $result = null;
-    public $resultMessage = null;
+	// policyResult
+	public $result = null;
+	public $resultMessage = null;
 }
 
 class ValidationResults {
-    public $id = null;
-    public $trackingId = null;
+	public $id = null;
+	public $trackingId = null;
 
-    // validationResult collection
-    public $results = array();
+	// validationResult collection
+	public $results = array();
 }
 
 */
-
-
-
