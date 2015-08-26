@@ -1,5 +1,5 @@
 ﻿
-namespace CanModerateNet.Data
+namespace cm.data.common
 {
     public enum PolicyType
     {
@@ -7,13 +7,20 @@ namespace CanModerateNet.Data
         ip,
         text,
         html,
-        email
+        email,
+        bandwidth
     }
 
     public enum PolicyResult
     {
-        unknown,
+        none,
         success,
         fail
+    }
+
+    public enum HttpMethod
+    {
+        GET,
+        POST
     }
 }

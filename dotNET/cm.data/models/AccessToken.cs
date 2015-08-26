@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace CanModerateNet.Data
+namespace cm.data.models
 {
     [XmlRoot("refreshToken")]
     public class AccessTokenRequest
